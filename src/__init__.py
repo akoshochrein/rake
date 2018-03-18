@@ -42,10 +42,15 @@ def get_candidates(text):
     # first tier candidates have stuck common stop words removed from them
     stripped_candidates = []
     for candidate in candidates:
-        for word in COMMON_STOP_WORDS:
-            candidate = re.sub(word_regex_map[word]['prefix'], '', candidate, re.IGNORECASE)
-            candidate = re.sub(word_regex_map[word]['suffix'], '', candidate, re.IGNORECASE)
-        stripped_candidates.append(candidate)
+        new_candidate = candidate
+        while True:
+            for word in COMMON_STOP_WORDS:
+                new_candidate = re.sub(word_regex_map[word]['prefix'], '', new_candidate, re.IGNORECASE)
+                new_candidate = re.sub(word_regex_map[word]['suffix'], '', new_candidate, re.IGNORECASE)
+            if new_candidate == candidate:
+                break
+            candidate = new_candidate
+        stripped_candidates.append(new_candidate)
 
     # second tier candidates should not include common stop words
     filtered_candidates = [
