@@ -33,10 +33,11 @@ punctuation_regex_map = {
 def get_candidates(text):
     separator_regex = '|'.join(PUTCTUATION + PADDED_COMMON_STOP_WORDS)
 
+    # zero tier candidates get just separated by punctuation and common stop words
     candidates = re.split(separator_regex, text)
     candidates = [candidate.lower() for candidate in candidates]
 
-    # first tier candidates might still contain some dirt
+    # first tier candidates have stuck common stop words removed from them
     stripped_candidates = []
     for candidate in candidates:
         for word in COMMON_STOP_WORDS:
@@ -44,10 +45,12 @@ def get_candidates(text):
             candidate = re.sub(word_regex_map[word]['suffix'], '', candidate, re.IGNORECASE)
         stripped_candidates.append(candidate)
 
+    # second tier candidates should not include common stop words
     filtered_candidates = [
         candidate for candidate in stripped_candidates if candidate not in COMMON_STOP_WORDS
     ]
 
+    # third tier candidates get cleaned up from punctuation
     cleaned_candidates = []
     for candidate in filtered_candidates:
         for punctuation in PUTCTUATION:
