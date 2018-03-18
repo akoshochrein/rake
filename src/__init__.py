@@ -1,5 +1,7 @@
 import re
 
+from collections import defaultdict
+
 PUTCTUATION = ['\, ', '\. ', '\! ', '\? ', '; ', '\n']
 
 #stop word list from SMART (Salton,1971).  Available at ftp://ftp.cs.cornell.edu/pub/smart/english.stop
@@ -60,6 +62,39 @@ def get_candidates(text):
     return cleaned_candidates
 
 
+def get_keyword_matrix(candidates):
+    keyword_matrix = defaultdict(lambda: defaultdict(int))
+    for candidate in candidates:
+        words = candidate.split(' ')
+        if 1 == len(words):
+            keyword_matrix[words[0]]['freq'] += 1
+        else:
+            for word in words:
+                keyword_matrix[word]['freq'] += 1
+                keyword_matrix[word]['deg'] += 1
+
+    for key, value in keyword_matrix.items():
+        if value.get('deg') is None:
+            value['deg'] = 1
+
+    return keyword_matrix
+
+
+def get_keywords_with_rank(candidates, keyword_matrix):
+    candidate_matrix = {candidate: {'deg': 0, 'freq': 0} for candidate in candidates}
+    for keyword, value in keyword_matrix.items():
+        for candidate in candidate_matrix.keys():
+            if keyword in candidate:
+                candidate_matrix[candidate]['deg'] += value['deg']
+                candidate_matrix[candidate]['freq'] += value['freq']
+
+    return {
+        key: value['freq'] / float(value['deg']) for key, value in candidate_matrix.items()
+    }
+
+
 def run():
     candidates = get_candidates(TEXT)
-    print candidates
+    keyword_matrix = get_keyword_matrix(candidates)
+    keywords_with_rank = get_keywords_with_rank(candidates, keyword_matrix)
+    print sorted(keywords_with_rank.items(), key=lambda (k, v): (v, k), reverse=True)[:len(candidates)//3]
