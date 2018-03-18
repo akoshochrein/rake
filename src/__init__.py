@@ -68,21 +68,20 @@ def get_candidates(text):
 
 
 def get_keyword_matrix(candidates):
-    keyword_matrix = defaultdict(lambda: defaultdict(int))
+    keyword_matrix = defaultdict(list)
     for candidate in candidates:
         words = candidate.split(' ')
-        if 1 == len(words):
-            keyword_matrix[words[0]]['freq'] += 1
-        else:
-            for word in words:
-                keyword_matrix[word]['freq'] += 1
-                keyword_matrix[word]['deg'] += 1
+        for word in words:
+            keyword_matrix[word] += words
 
-    for key, value in keyword_matrix.items():
-        if value.get('deg') is None:
-            value['deg'] = 1
+    deg_freq_by_keyword = {
+        keyword: {
+            'freq': len(vertices),
+            'deg': vertices.count(keyword)
+        } for keyword, vertices in keyword_matrix.items()
+    }
 
-    return keyword_matrix
+    return deg_freq_by_keyword
 
 
 def get_keywords_with_rank(candidates, keyword_matrix):
