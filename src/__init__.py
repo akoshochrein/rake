@@ -1,3 +1,4 @@
+import argparse
 import re
 
 from collections import defaultdict
@@ -98,7 +99,21 @@ def get_keywords_with_rank(candidates, keyword_matrix):
 
 
 def run():
-    candidates = get_candidates(TEXT)
+    parser = argparse.ArgumentParser()
+    parser.add_argument('filename', help="The desired filename for the RAKE algorithm to execute against.")
+    parser.add_argument('-f', '--filename', dest='filename', help="The desired filename for the RAKE algorithm to execute against.")
+    args = parser.parse_args()
+
+    text = ''
+    if args.filename is not None:
+        try:
+            with open(args.filename, 'r') as f:
+                text = f.read()
+        except IOError:
+            print "Could not find file {filename}".format(filename=args.filename)
+            exit(1)
+
+    candidates = get_candidates(text.strip())
     keyword_matrix = get_keyword_matrix(candidates)
     keywords_with_rank = get_keywords_with_rank(candidates, keyword_matrix)
     print sorted(keywords_with_rank.items(), key=lambda (k, v): (v, k), reverse=True)[:len(candidates)//3]
