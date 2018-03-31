@@ -91,10 +91,15 @@ def get_keywords_with_rank(candidates, keyword_matrix):
 def run():
     parser = argparse.ArgumentParser()
     parser.add_argument(
+        'text', 
+        nargs='?',
+        help="Text for the RAKE algorithm to be ran against.",
+    )
+    parser.add_argument(
         '-f', '--filename',
         type=argparse.FileType('r'),
         dest='filename',
-        help="The desired filename for the RAKE algorithm to execute against."
+        help="The desired filename for the RAKE algorithm to execute against.",
     )
     args = parser.parse_args()
 
@@ -105,6 +110,11 @@ def run():
         except IOError:
             print "Could not find file {filename}".format(filename=args.filename)
             exit(1)
+    elif args.text is not None:
+        text = args.text
+    else:
+        parser.print_help()
+        exit(0)
 
     candidates = get_candidates(text.strip())
     keyword_matrix = get_keyword_matrix(candidates)
