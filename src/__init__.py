@@ -1,12 +1,9 @@
-import argparse
 import re
 
 from collections import defaultdict
 
-from const import (
-    ARGS_PARSE_FILENAME_HELP, ARGS_PARSE_TEXT_HELP, COMMON_STOP_WORDS, PADDED_COMMON_STOP_WORDS,
-    PUNCTUATION,
-)
+from const import COMMON_STOP_WORDS, PADDED_COMMON_STOP_WORDS, PUNCTUATION
+from loader import load_text
 
 
 word_regex_map = {
@@ -87,33 +84,7 @@ def get_keywords_with_rank(candidates, keyword_matrix):
 
 
 def run():
-    parser = argparse.ArgumentParser()
-    parser.add_argument(
-        'text', 
-        nargs='?',
-        help=ARGS_PARSE_TEXT_HELP,
-    )
-    parser.add_argument(
-        '-f', '--filename',
-        type=argparse.FileType('r'),
-        dest='filename',
-        help=ARGS_PARSE_FILENAME_HELP,
-    )
-    args = parser.parse_args()
-
-    text = ''
-    if args.filename is not None:
-        try:
-            text = args.filename.read()
-        except IOError:
-            print "Could not find file {filename}".format(filename=args.filename)
-            exit(1)
-    elif args.text is not None:
-        text = args.text
-    else:
-        parser.print_help()
-        exit(0)
-
+    text = load_text()
     candidates = get_candidates(text.strip())
     keyword_matrix = get_keyword_matrix(candidates)
     keywords_with_rank = get_keywords_with_rank(candidates, keyword_matrix)
