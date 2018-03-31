@@ -23,6 +23,10 @@ setup(
         'Programming Language :: Python :: 2',
     ],
     packages=find_packages(exclude=['contrib', 'docs', 'tests', 'scripts']),
+    tests_require=[
+        'tox',
+        'pytest',
+    ],
     install_requires=[
         'argparse',
     ],

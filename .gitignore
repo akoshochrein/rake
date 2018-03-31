@@ -2,3 +2,6 @@ virtualenv
 *.pyc
 *.egg-info
 .vscode
+
+.tox
+.pytest_cache
