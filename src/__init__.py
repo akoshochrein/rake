@@ -3,6 +3,8 @@ import re
 
 from collections import defaultdict
 
+from const import ARGS_PARSE_FILENAME_HELP, ARGS_PARSE_TEXT_HELP
+
 PUTCTUATION = ['\, ', '\. ', '\! ', '\? ', '; ', '\n']
 
 # stop word list from SMART (Salton,1971).  Available at ftp://ftp.cs.cornell.edu/pub/smart/english.stop
@@ -93,13 +95,13 @@ def run():
     parser.add_argument(
         'text', 
         nargs='?',
-        help="Text for the RAKE algorithm to be ran against.",
+        help=ARGS_PARSE_TEXT_HELP,
     )
     parser.add_argument(
         '-f', '--filename',
         type=argparse.FileType('r'),
         dest='filename',
-        help="The desired filename for the RAKE algorithm to execute against.",
+        help=ARGS_PARSE_FILENAME_HELP,
     )
     args = parser.parse_args()
 
