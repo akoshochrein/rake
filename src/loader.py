@@ -2,7 +2,8 @@ import argparse
 
 from const import ARGS_PARSE_FILENAME_HELP, ARGS_PARSE_TEXT_HELP
 
-def load_text():
+
+def _get_argument_parser():
     parser = argparse.ArgumentParser()
     parser.add_argument(
         'text', 
@@ -15,6 +16,11 @@ def load_text():
         dest='filename',
         help=ARGS_PARSE_FILENAME_HELP,
     )
+    return parser
+
+
+def load_text():
+    parser = _get_argument_parser()
     args = parser.parse_args()
 
     text = ''
