@@ -1,4 +1,5 @@
 import argparse
+import sys
 
 from const import ARGS_PARSE_FILENAME_HELP, ARGS_PARSE_TEXT_HELP
 
@@ -25,14 +26,14 @@ def load_text():
 
     text = ''
     if args.filename is not None:
-        try:
-            text = args.filename.read()
-        except IOError:
-            print "Could not find file {filename}".format(filename=args.filename)
-            exit(1)
+        text = args.filename.read()
     elif args.text is not None:
         text = args.text
-    else:
+    elif not sys.stdin.isatty():
+        for line in sys.stdin:
+            text += line
+
+    if not text:
         parser.print_help()
         exit(0)
 
