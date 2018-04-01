@@ -1,4 +1,5 @@
 import re
+import sys
 
 from collections import defaultdict
 
@@ -88,4 +89,8 @@ def run():
     candidates = get_candidates(text.strip())
     keyword_matrix = get_keyword_matrix(candidates)
     keywords_with_rank = get_keywords_with_rank(candidates, keyword_matrix)
-    print sorted(keywords_with_rank.items(), key=lambda (k, v): (v, k), reverse=True)[:len(candidates)//3]
+    for pair in sorted(keywords_with_rank.items(), key=lambda (k, v): (v, k), reverse=True)[:len(candidates)//3]:
+        sys.stdout.write('{rank}\t{keyword}\n'.format(
+            keyword=pair[0],
+            rank=pair[1],
+        ))
