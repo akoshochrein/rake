@@ -1,7 +1,7 @@
 import argparse
 import sys
 
-from const import ARGS_PARSE_FILENAME_HELP, ARGS_PARSE_TEXT_HELP
+from .const import ARGS_PARSE_FILENAME_HELP, ARGS_PARSE_TEXT_HELP
 
 
 def _get_argument_parser():

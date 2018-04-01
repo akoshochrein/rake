@@ -39,4 +39,4 @@ cat textfile-to-analyze.txt | prake
 Pull requests and issues are always welcome. If you want to work on something, please open an issue for it first and send a pull request.
 
 ### Testing
-pRAKE currently runs under Python 2.7 and we are running tests under the same environment using `tox` and `pytest`. If you make some modifications, please indicate that change in the form of a test as well.
+pRAKE currently runs under Python 2.7 and Python 3.6 and we are running tests under the same environments using `tox` and `pytest`. If you make some modifications, please indicate that change in the form of a test as well. And make sure that the tests are passing on all of them.

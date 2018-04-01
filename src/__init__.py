@@ -3,8 +3,8 @@ import sys
 
 from collections import defaultdict
 
-from const import COMMON_STOP_WORDS, PADDED_COMMON_STOP_WORDS, PUNCTUATION
-from loader import load_text
+from .const import COMMON_STOP_WORDS, PADDED_COMMON_STOP_WORDS, PUNCTUATION
+from .loader import load_text
 
 
 word_regex_map = {
@@ -80,7 +80,7 @@ def get_keywords_with_rank(candidates, keyword_matrix):
                 candidate_matrix[candidate]['freq'] += value['freq']
 
     return {
-        key: value['freq'] / float(value['deg']) for key, value in candidate_matrix.items()
+        key: value['freq'] / float(value['deg']) for key, value in list(candidate_matrix.items())
     }
 
 
@@ -89,7 +89,7 @@ def run():
     candidates = get_candidates(text.strip())
     keyword_matrix = get_keyword_matrix(candidates)
     keywords_with_rank = get_keywords_with_rank(candidates, keyword_matrix)
-    for pair in sorted(keywords_with_rank.items(), key=lambda (k, v): (v, k), reverse=True)[:len(candidates)//3]:
+    for pair in sorted(list(keywords_with_rank.items()), key=lambda e: (e[0], e[1]), reverse=True)[:len(candidates)//3]:
         sys.stdout.write('{rank}\t{keyword}\n'.format(
             keyword=pair[0],
             rank=pair[1],
